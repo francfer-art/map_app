@@ -1,4 +1,4 @@
-# 🚗 Route Planner Panel (React Component)
+# 🚗 Route Planner Panel
 
 This project provides an interactive **Search Panel** component built with **React**, designed to let users easily configure a route search with optional stops and parking.
 
