@@ -1,12 +1,32 @@
-# React + Vite
+# 🚗 Route Planner Panel (React Component)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This project provides an interactive **Search Panel** component built with **React**, designed to let users easily configure a route search with optional stops and parking.
 
-Currently, two official plugins are available:
+## ✨ Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- 📍 **Origin and Destination Input**  
+  Users can input their current location and desired destination.
 
-## Expanding the ESLint configuration
+- 🛑 **Optional Stopovers**  
+  Users can choose to add automatic stop suggestions and define the frequency of those stops in kilometers.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- 🅿️ **Optional Parking Search**  
+  Users can enable parking search near their destination, specifying a search radius.
+
+- 🔄 **Step-by-Step Interface**  
+  The form guides the user through three configuration steps:
+  1. Origin and Destination
+  2. Stopover Preferences
+  3. Parking Preferences
+
+- 🔎 **Geocoding Support**  
+  Inputs are converted into geographic coordinates via a `geocodeAddress` utility function.
+
+- 🧠 **Data Validation**  
+  Basic validation ensures all required inputs are filled in and logically correct.
+
+- 🌀 **Loading Spinner**  
+  When the user submits the final step, a spinner appears with the message "Calculating route..." to indicate the route is being processed.
+
+## 📁 File Structure
+
