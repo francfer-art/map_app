@@ -83,7 +83,7 @@ const SearchPanel = ({ onSearchSubmit }) => {
           <>
             <input
               type="text"
-              placeholder="¿Dónde estás?"
+              placeholder="Where are you coming from?"
               value={origin}
               onChange={(e) => setOrigin(e.target.value)}
               style={{
@@ -95,7 +95,7 @@ const SearchPanel = ({ onSearchSubmit }) => {
             />
             <input
               type="text"
-              placeholder="¿Adónde vas?"
+              placeholder="Where are you going?"
               value={destination}
               onChange={(e) => setDestination(e.target.value)}
               style={{
@@ -230,7 +230,7 @@ const SearchPanel = ({ onSearchSubmit }) => {
             left: "50%",
             transform: "translate(-50%, -50%)",
             backgroundColor: "rgba(0, 0, 0, 0.8)",
-            padding: "16px",
+            padding: "32px",
             borderRadius: "8px",
             zIndex: 1000,
             width: "280px",
@@ -249,7 +249,6 @@ const SearchPanel = ({ onSearchSubmit }) => {
           ) : (
             <>
               {renderStep()}
-              {/* Botones de navegación aquí */}
             </>
           )}
 
