@@ -13,8 +13,21 @@ const SearchPanel = ({ onSearchSubmit }) => {
   const [wantsParking, setWantsParking] = useState(null);
   const [parkingRadius, setParkingRadius] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const togglePanel = () => setVisible(!visible);
+
+  const resetForm = () => {
+    setStep(1);
+    setOrigin("");
+    setDestination("");
+    setWantsStops(null);
+    setStopFrequency("");
+    setWantsParking(null);
+    setParkingRadius("");
+
+    setTimeout(() => setErrorMessage(""), 3000);
+  };
 
   const handleBuscarDireccion = async () => {
     setIsLoading(true);
@@ -38,7 +51,10 @@ const SearchPanel = ({ onSearchSubmit }) => {
         setVisible(false);
         setStep(1);
       } else {
-        alert("No se pudieron obtener coordenadas");
+        setErrorMessage(
+          "Please check the addresses you entered. They could not be geocoded."
+        );
+        resetForm();
       }
     } finally {
       setIsLoading(false);
@@ -46,9 +62,12 @@ const SearchPanel = ({ onSearchSubmit }) => {
   };
 
   const nextStep = () => {
+    setErrorMessage("");
+
     if (step === 1) {
       if (!origin.trim() || !destination.trim()) {
-        alert("Por favor, ingresa origen y destino");
+        setErrorMessage("Please fill in both fields.");
+        setTimeout(() => setErrorMessage(""), 3000);
         return;
       }
     }
@@ -57,7 +76,9 @@ const SearchPanel = ({ onSearchSubmit }) => {
       wantsStops === true &&
       (!stopFrequency || isNaN(stopFrequency) || stopFrequency <= 0)
     ) {
-      alert("Por favor, ingresa una frecuencia válida");
+      setErrorMessage("Please, enter a valid stop frequency.");
+      setTimeout(() => setErrorMessage(""), 3000);
+
       return;
     }
     if (
@@ -65,7 +86,9 @@ const SearchPanel = ({ onSearchSubmit }) => {
       wantsParking === true &&
       (!parkingRadius || isNaN(parkingRadius) || parkingRadius <= 0)
     ) {
-      alert("Por favor, ingresa un radio válido");
+      setErrorMessage("Please, enter a valid parking radius.");
+      setTimeout(() => setErrorMessage(""), 3000);
+
       return;
     }
 
@@ -249,6 +272,21 @@ const SearchPanel = ({ onSearchSubmit }) => {
           ) : (
             <>
               {renderStep()}
+              {errorMessage && (
+                <div
+                  style={{
+                    backgroundColor: "#ff4d4f",
+                    color: "white",
+                    padding: "8px",
+                    borderRadius: "4px",
+                    width: "100%",
+                    textAlign: "center",
+                    fontSize: "14px",
+                  }}
+                >
+                  {errorMessage}
+                </div>
+              )}
             </>
           )}
 
