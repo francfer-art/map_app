@@ -4,7 +4,7 @@ export async function fetchParkingNearDestination(dest, radius = 1000) {
   const query = `
     [out:json];
     (
-      node["amenity"="parking"](around:${radius},${dest[0]},${dest[1]});
+      node["amenity"="parking"](around:${radius},${dest.lat},${dest.lng});
     );
     out body;
   `;

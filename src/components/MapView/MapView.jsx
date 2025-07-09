@@ -4,9 +4,12 @@ import { MapContainer, TileLayer } from "react-leaflet";
 import { getApproxUserLocation } from "../../utils/InitialLocation";
 import MapUpdater from "./MapUpdater";
 import RouteLine from "./RouteLine";
+import { fetchParkingNearDestination } from "../../utils/fetchParkingNearDestination";
+import MarkerPoint from "./MarkerPoint";
 
 const MapView = ({ searchData }) => {
   const [center, setCenter] = useState([0, 0]);
+  const [parkingSpots, setParkingSpots] = useState([]);
   const origin = searchData?.origin;
   const destination = searchData?.destination;
 
@@ -15,6 +18,14 @@ const MapView = ({ searchData }) => {
       if (location) setCenter([location.lat, location.lng]);
     });
   }, []);
+
+  useEffect(() => {
+    console.log("searchData:", searchData);
+    fetchParkingNearDestination(destination, 2000).then((parkingSpots) => {
+      console.log("Parking spots near destination:", parkingSpots);
+      setParkingSpots(parkingSpots);
+    });
+  }, [searchData]);
 
   return (
     <MapContainer
@@ -33,11 +44,20 @@ const MapView = ({ searchData }) => {
           from={origin}
           to={destination}
           onRouteInfo={({ distanceKm, timeMin }) => {
-            console.log(`📍 Distancia: ${distanceKm} km, Tiempo estimado: ${timeMin} min`);
+            console.log(
+              `📍 Distancia: ${distanceKm} km, Tiempo estimado: ${timeMin} min`
+            );
             // Aquí podrías hacer algo con routeCoords si lo necesitas
           }}
         />
       )}
+      {parkingSpots.map((spot, index) => (
+        <MarkerPoint
+          key={index}
+          position={[spot.lat, spot.lng]}
+          text={spot.name}
+        />
+      ))}
     </MapContainer>
   );
 };
