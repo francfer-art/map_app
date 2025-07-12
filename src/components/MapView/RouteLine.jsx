@@ -22,13 +22,17 @@ const RouteLine = ({ from, to, onRouteInfo }) => {
       },
     }).addTo(map);
 
-      control.on('routesfound', function (e) {
+    control.on("routesfound", function (e) {
       const route = e.routes[0];
       const distanceKm = (route.summary.totalDistance / 1000).toFixed(2);
       const timeMin = Math.round(route.summary.totalTime / 60);
 
       if (onRouteInfo) {
-        onRouteInfo({ distanceKm, timeMin });
+        const routeCoords = route.coordinates.map((coord) => ({
+          lat: coord.lat,
+          lng: coord.lng,
+        }));
+        onRouteInfo({ distanceKm, timeMin, routeCoords });
       }
     });
     return () => map.removeControl(control);

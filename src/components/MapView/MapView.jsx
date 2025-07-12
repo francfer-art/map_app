@@ -6,10 +6,12 @@ import MapUpdater from "./MapUpdater";
 import RouteLine from "./RouteLine";
 import { fetchParkingNearDestination } from "../../utils/fetchParkingNearDestination";
 import MarkerPoint from "./MarkerPoint";
+import { fetchPOIsAlongRoute } from "../../utils/fetchStopsAlongRoute";
 
 const MapView = ({ searchData }) => {
   const [center, setCenter] = useState([0, 0]);
   const [parkingSpots, setParkingSpots] = useState([]);
+  const [stopsAlongRoute, setStopsAlongRoute] = useState([]);
   const origin = searchData?.origin;
   const destination = searchData?.destination;
 
@@ -21,10 +23,12 @@ const MapView = ({ searchData }) => {
 
   useEffect(() => {
     console.log("searchData:", searchData);
-    fetchParkingNearDestination(destination, 2000).then((parkingSpots) => {
-      console.log("Parking spots near destination:", parkingSpots);
-      setParkingSpots(parkingSpots);
-    });
+    if (searchData?.parkingRadius) {
+      fetchParkingNearDestination(destination, searchData.parkingRadius * 1000).then((parkingSpots) => {
+        console.log("Parking spots near destination:", parkingSpots);
+        setParkingSpots(parkingSpots);
+      });
+    }
   }, [searchData]);
 
   return (
@@ -43,15 +47,30 @@ const MapView = ({ searchData }) => {
         <RouteLine
           from={origin}
           to={destination}
-          onRouteInfo={({ distanceKm, timeMin }) => {
+          onRouteInfo={({ distanceKm, timeMin, routeCoords }) => {
             console.log(
               `📍 Distancia: ${distanceKm} km, Tiempo estimado: ${timeMin} min`
             );
-            // Aquí podrías hacer algo con routeCoords si lo necesitas
+            console.log("Route coordinates:", routeCoords);
+            if (searchData?.stopFrequency) {
+              fetchPOIsAlongRoute(routeCoords,  "restaurant", searchData.stopFrequency * 1000).then(
+                (stopsAlong) => {
+                  console.log("Stops along route:", stopsAlong);
+                  setStopsAlongRoute(stopsAlong);
+                }
+              );
+            }
           }}
         />
       )}
       {parkingSpots.map((spot, index) => (
+        <MarkerPoint
+          key={index}
+          position={[spot.lat, spot.lng]}
+          text={spot.name}
+        />
+      ))}
+      {stopsAlongRoute.map((spot, index) => (
         <MarkerPoint
           key={index}
           position={[spot.lat, spot.lng]}
